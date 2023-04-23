@@ -12,7 +12,10 @@ public class CMD_Help extends ListenerAdapter {
             Member m = e.getMember();
             e.reply("There are the following commands available:\r\n" +
                     "**/help** - command list\r\n" +
-                    "**/broadcast <channelid> <msg>** - To broadcast a message in the specified channel").queue();
+                    "**/broadcast <channelid> <msg>** - To broadcast a message in the specified channel\r\n" +
+                    "**/giverole <role> <user>** - add a specific role to member\r\n" +
+                    "**/removerole <role> <user>** - remove a specific role from member\r\n" +
+                    "**/activegw** - shows you how many giveaways are active").queue();
         }
     }
 }

@@ -5,12 +5,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MySQL {
-    public static Connection con;
+    public static Connection con = null;
 
     public static void connect() {
         if (!isConnected()) {
             try {
-                con = DriverManager.getConnection("jdbc:mysql://" + ConfigManager.host + ":" + ConfigManager.port + "/" + ConfigManager.database + "?autoReconnect=true", ConfigManager.username, ConfigManager.password);
+                con = DriverManager.getConnection("jdbc:mysql://" + ConfigManager.host + ":" + ConfigManager.port + "/" + ConfigManager.database + "?user=" + ConfigManager.username + "&password=" + ConfigManager.password);
 
                 System.out.println("MySQL connected!");
 

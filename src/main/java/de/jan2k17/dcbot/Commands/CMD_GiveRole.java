@@ -13,9 +13,14 @@ public class CMD_GiveRole extends ListenerAdapter {
         if(e.getName().equalsIgnoreCase("giverole")){
             Member m = e.getOption("user", OptionMapping::getAsMember);
             Role r = e.getOption("role", OptionMapping::getAsRole);
-            //000
-            m.getRoles().add(r);
-            e.reply("Added role ```" + r + "``` to User " + m.getAsMention()).queue();
+            e.getGuild().addRoleToMember(m, r).queue();
+            e.reply("Added role " + r.getAsMention() + " to User " + m.getAsMention()).queue();
+        }
+        if(e.getName().equalsIgnoreCase("removerole")){
+            Member m = e.getOption("user", OptionMapping::getAsMember);
+            Role r = e.getOption("role", OptionMapping::getAsRole);
+            e.getGuild().removeRoleFromMember(m, r).queue();
+            e.reply("Removed role " + r.getAsMention() + " from User " + m.getAsMention()).queue();
         }
     }
 }
