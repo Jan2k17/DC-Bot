@@ -9,13 +9,14 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Main {
+    private static final String[] activities = {"Type /help", "counting members", "counting coins", "Minecraft"};
+    private static int cIndex = 1;
     public static void main(String[] args) {
         MySQL.connect();
 
@@ -24,7 +25,7 @@ public class Main {
             System.exit(0);
         } else {
             List<GatewayIntent> gateway = new ArrayList<>();
-            for(GatewayIntent intent : GatewayIntent.values()){
+            for(GatewayIntent intent : GatewayIntent.values()) {
                 gateway.add(intent);
             }
             JDA jda = JDABuilder.createLight(Token.token, Collections.emptyList()).enableIntents(gateway)
@@ -35,10 +36,11 @@ public class Main {
                     .addEventListeners(new CMD_GiveRole())
                     .addEventListeners(new CMD_settings())
                     .addEventListeners(new CMD_Ping())
-                    //.addEventListeners(new CMD_getWinner())
+                    .addEventListeners(new CMD_Coins())
+                    .addEventListeners(new CMD_Shop())
 
                     .addEventListeners(new EVENT_SendMessage())
-                    .setActivity(Activity.playing("Type /help"))
+                    .setActivity(Activity.playing("typing ..."))
                     .build();
 
             jda.updateCommands().addCommands(
@@ -67,14 +69,28 @@ public class Main {
                             .addOption(OptionType.STRING, "message", "message to broadcast", true),
                     Commands.slash("settings", "change some settings")
                             .setGuildOnly(true)
-                            .addOption(OptionType.STRING, "option", "select an option: autorole")
-                            .addOption(OptionType.ROLE, "autorole", "*only for autorole-option*")/*,
-                    Commands.slash("getwinner", "get a winner")
+                            .addOptions(new OptionData(OptionType.STRING, "option", "select an option", true)
+                                    .addChoice("autorole", "autorole")
+                                    .addChoice("log channel", "logchannel")
+                            )
+                            .addOption(OptionType.ROLE, "autorole", "*only for autorole-option*")
+                            .addOption(OptionType.CHANNEL, "logchannel", "*only for log-option*"),
+                    Commands.slash("coins", "how many coins you have?")
+                            .setGuildOnly(true),
+                    Commands.slash("shop", "open coin-shop")
+                            .setGuildOnly(true),
+                    Commands.slash("shopadd", "add item to coin-shop")
+                            .setGuildOnly(true),
+                    Commands.slash("shopdel", "remove an item from coin-shop")
                             .setGuildOnly(true)
-                            .addOption(OptionType.STRING, "giveaway", "giveaway-id", true)
-                            .addOption(OptionType.CHANNEL, "channel", "select the giveaway channel", true)*/
             ).queue();
-            //CMD_Giveaway.activeGW();
+
+            new Timer().schedule(new TimerTask(){
+                public void run(){
+                    jda.getPresence().setActivity(Activity.playing(activities[cIndex]));
+                    cIndex=(cIndex+1)% activities.length;
+                }
+            }, 0, 30_000);
         }
     }
 }

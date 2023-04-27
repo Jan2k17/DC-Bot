@@ -8,6 +8,7 @@ public class GuildJoin extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent e)
     {
+        if(e.getUser().isBot()) { return; }
         String AutoRole = SQL_Handler.getAutoRole(e.getGuild().getId());
         e.getGuild().addRoleToMember(e.getUser(), e.getGuild().getRoleById(AutoRole)).queue();
     }

@@ -1,17 +1,15 @@
 package de.jan2k17.dcbot.Commands;
 
+import de.jan2k17.dcbot.Functions.Logging;
 import de.jan2k17.dcbot.Handler.SQL_Handler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 import java.awt.*;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,12 +28,13 @@ public class CMD_Giveaway extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e)
     {
         if(e.getName().equalsIgnoreCase("giveaway")){
+            if(e.getMember().getUser().isBot()) { return; }
             e.deferReply(true).queue();
             int duration = e.getOption("duration", OptionMapping::getAsInt);
             String msg = e.getOption("message", OptionMapping::getAsString);
             ChannelType ct = e.getOption("channel", OptionMapping::getChannelType);
             if(ct != ChannelType.TEXT && ct != ChannelType.NEWS) {
-                e.getHook().editOriginal("FEHLER!!!").queue();
+                e.getHook().editOriginal("**ERR::G01**").queue();
                 return;
             }
 
@@ -85,8 +84,8 @@ public class CMD_Giveaway extends ListenerAdapter {
                         .editMessageEmbedsById(msgID, eb.build()).queue();
             }
 
-            //e.reply("Giveaway started. (End: " + dateEnd + ")").queue();
             e.getHook().editOriginal("Giveaway started. (End: " + dateEnd + ")").queue();
+            Logging.Log(e.getGuild(), "Giveaway started. (End: " + dateEnd + " - gwID: " + msgID + ")", e.getMember());
         }
         if(e.getName().equalsIgnoreCase("activegw")){
             e.reply("There are " + giveaways.size() + " active giveaways!").queue();

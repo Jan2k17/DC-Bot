@@ -1,5 +1,6 @@
 package de.jan2k17.dcbot.Commands;
 
+import de.jan2k17.dcbot.Functions.Logging;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.Channel;
@@ -13,15 +14,21 @@ public class CMD_Broadcast extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e)
     {
         if(e.getName().equalsIgnoreCase("broadcast")){
+            if(e.getMember().getUser().isBot()) { return; }
+            e.deferReply(true).queue();
             Member m = e.getMember();
             Guild g = e.getGuild();
             Channel ch = e.getOption("channel", OptionMapping::getAsChannel);
             String msg = e.getOption("message", OptionMapping::getAsString);
             TextChannel tch = g.getTextChannelById(ch.getId());
             tch.sendMessage(msg).queue();
-            e.reply("**Broadcast** mit der Nachricht:\r\n" +
+            e.getHook().editOriginal("**Broadcast** mit der Nachricht:\r\n" +
                     "```" + msg + "```\r\n" +
                     "Wurde versendet!").queue();
+
+            Logging.Log(e.getGuild(), "**Broadcast** mit der Nachricht:\r\n" +
+                    "```" + msg + "```\r\n" +
+                    "Wurde versendet!", e.getMember());
         }
     }
 }

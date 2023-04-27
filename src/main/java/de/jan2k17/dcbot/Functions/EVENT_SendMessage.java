@@ -15,8 +15,8 @@ public class EVENT_SendMessage extends ListenerAdapter {
         if(m.getUser().isBot()){ return; }
         //send msg = 4 coins
         SQL_Handler.addStats(g.getId(), m.getId(), "messages", 4);
+        SQL_Handler.addCoin(g.getId(), m.getId(), 4);
     }
-
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent e){
         Member m = e.getMember();
@@ -24,5 +24,6 @@ public class EVENT_SendMessage extends ListenerAdapter {
         if(m.getUser().isBot()){ return; }
         //add reaction = 2 coin
         SQL_Handler.addStats(g.getId(), m.getId(), "reactions", 2);
+        SQL_Handler.addCoin(g.getId(), m.getId(), 2);
     }
 }

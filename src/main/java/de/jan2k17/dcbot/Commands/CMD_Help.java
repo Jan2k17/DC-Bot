@@ -15,7 +15,9 @@ public class CMD_Help extends ListenerAdapter {
                     "**/broadcast <channelid> <msg>** - To broadcast a message in the specified channel\r\n" +
                     "**/giverole <role> <user>** - add a specific role to member\r\n" +
                     "**/removerole <role> <user>** - remove a specific role from member\r\n" +
-                    "**/activegw** - shows you how many giveaways are active").queue();
+                    "**/activegw** - shows you how many giveaways are active\r\n" +
+                    "**/coins** - shows you, how many coins you have\r\n" +
+                    "**/ping** - Pong!").queue();
         }
     }
 }
