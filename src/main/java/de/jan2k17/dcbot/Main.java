@@ -1,6 +1,7 @@
 package de.jan2k17.dcbot;
 
 import de.jan2k17.dcbot.Commands.*;
+import de.jan2k17.dcbot.Commands.Games.*;
 import de.jan2k17.dcbot.Functions.EVENT_SendMessage;
 import de.jan2k17.dcbot.Functions.GuildJoin;
 import de.jan2k17.dcbot.Handler.MySQL;
@@ -32,13 +33,13 @@ public class Main {
                     .addEventListeners(new CMD_Help())
                     .addEventListeners(new CMD_Broadcast())
                     .addEventListeners(new CMD_Giveaway())
-                    .addEventListeners(new GuildJoin())
                     .addEventListeners(new CMD_GiveRole())
                     .addEventListeners(new CMD_settings())
                     .addEventListeners(new CMD_Ping())
                     .addEventListeners(new CMD_Coins())
                     .addEventListeners(new CMD_Shop())
-
+                    .addEventListeners(new MG_Hangman())
+                    .addEventListeners(new GuildJoin())
                     .addEventListeners(new EVENT_SendMessage())
                     .setActivity(Activity.playing("typing ..."))
                     .build();
@@ -48,6 +49,9 @@ public class Main {
                             .setGuildOnly(true),
                     Commands.slash("ping", "ping")
                             .setGuildOnly(true),
+                    Commands.slash("hangman", "play hangman ;)")
+                            .setGuildOnly(true)
+                            .addOption(OptionType.STRING, "letter", "guess a letter"),
                     Commands.slash("giveaway", "create a giveaway")
                             .setGuildOnly(true)
                             .addOption(OptionType.CHANNEL, "channel", "channel to post the giveaway", true)

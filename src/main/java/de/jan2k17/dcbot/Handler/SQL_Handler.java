@@ -1,5 +1,8 @@
 package de.jan2k17.dcbot.Handler;
 
+import de.jan2k17.dcbot.Functions.Logging;
+import net.dv8tion.jda.api.entities.Guild;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +17,7 @@ public class SQL_Handler {
                 return rs.getString("autorole");
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
 
         return null;
@@ -24,7 +27,7 @@ public class SQL_Handler {
             PreparedStatement st = MySQL.con.prepareStatement("UPDATE settings SET autorole = " + RoleID + " WHERE guild = " + GuildID + ";");
             st.executeUpdate();
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
     }
     public static String getLogChannel(String GuildID) {
@@ -35,7 +38,7 @@ public class SQL_Handler {
                 return rs.getString("logch");
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
 
         return null;
@@ -45,7 +48,7 @@ public class SQL_Handler {
             PreparedStatement st = MySQL.con.prepareStatement("UPDATE settings SET logch = " + chID + " WHERE guild = " + GuildID + ";");
             st.executeUpdate();
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
     }
 
@@ -59,7 +62,7 @@ public class SQL_Handler {
             st.setString(5, msgID);
             st.executeUpdate();
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
     }
 
@@ -75,7 +78,7 @@ public class SQL_Handler {
             st.setString(2, userID);
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
     }
     public static void addStats(String guild, String userID, String stat, int amount){
@@ -105,7 +108,7 @@ public class SQL_Handler {
                 st.executeUpdate();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
     }
     public static String getUserStats(String guild, String userID){
@@ -125,7 +128,7 @@ public class SQL_Handler {
                 return "0-0-0";
             }
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
         return "0-0-0";
     }
@@ -152,7 +155,7 @@ public class SQL_Handler {
                 return 0;
             }
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
         return 0;
     }
@@ -164,7 +167,7 @@ public class SQL_Handler {
             st.setString(3, userID);
             st.executeUpdate();
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
     }
     public static void delCoin(String guild, String userID, int amount){
@@ -175,7 +178,7 @@ public class SQL_Handler {
             st.setString(3, userID);
             st.executeUpdate();
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
     }
     /*
@@ -191,7 +194,7 @@ public class SQL_Handler {
             st.setInt(3, Integer.parseInt(cost));
             st.executeUpdate();
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
     }
     public static void delShopItem(String guild, String itemname, int cost){
@@ -202,7 +205,7 @@ public class SQL_Handler {
             st.setString(3, guild);
             st.executeUpdate();
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
     }
     public static int getCountItems(String guild){
@@ -214,7 +217,7 @@ public class SQL_Handler {
                 return rs.getInt("items");
             }
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
         return 0;
     }
@@ -229,7 +232,7 @@ public class SQL_Handler {
             }
             return shopItems;
         } catch(SQLException e){
-            e.printStackTrace();
+            Logging.error(e.getMessage());
         }
         return null;
     }

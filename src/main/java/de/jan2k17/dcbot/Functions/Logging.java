@@ -20,4 +20,9 @@ public class Logging {
 
         g.getTextChannelById(SQL_Handler.getLogChannel(g.getId())).sendMessageEmbeds(eb.build()).queue();
     }
+    public static void error(String msg){
+        System.err.println("==============-ERROR-==============");
+        System.err.println(msg);
+        System.err.println("==============-ERROR-==============");
+    }
 }
