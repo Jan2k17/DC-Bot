@@ -1,5 +1,6 @@
 package de.jan2k17.dcbot.Commands.Games;
 
+import de.jan2k17.dcbot.Handler.SQL_Handler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -11,7 +12,8 @@ import java.util.Random;
 
 public class MG_Hangman extends ListenerAdapter {
 
-    private static String[] words = {"Discord", "Facebook", "YouTube", "EpicGames", "Steam", "Google"};
+    //private static String[] words = {"Discord", "Facebook", "YouTube", "EpicGames", "Steam", "Google"};
+    private static String[] words = {"a","b","c"};
     private static String curr_word = "";
     private static boolean active = false;
     private static boolean correct = false;
@@ -28,7 +30,9 @@ public class MG_Hangman extends ListenerAdapter {
             Guild g = e.getGuild();
             if (m.getUser().isBot()) { return; }
 
-            if(active != true) {
+            System.out.println("active game :: " + active);
+
+            if(active == false) {
                 Random rn = new Random();
                 int word = rn.nextInt(words.length);
                 curr_word = words[word].toLowerCase();
@@ -70,8 +74,8 @@ public class MG_Hangman extends ListenerAdapter {
                         }
                     }
                     if(i == (length - 1)){
-                        if(!lines.contains("-") || active == false){
-                            active = !active;
+                        if(active == false){
+                            //active = !active;
                             e.getHook().editOriginal("You can't guess letters without an active hangman game.").queue();
                             return;
                         }
@@ -92,9 +96,26 @@ public class MG_Hangman extends ListenerAdapter {
                             "\r\n" +
                             "Mistakes: " + error + "/9");
                     eb.setImage(getErrPic(error));
-                    e.getChannel().editMessageEmbedsById(msgID, eb.build()).queue();
+                    e.getChannel().editMessageEmbedsById(msgID, eb.build()).complete();
                     e.getHook().editOriginal("You guessed an incorrect letter :(").queue();
+                    if(error == 9){
+                        active = false;
+                        curr_word = "";
+                        lines = "";
+                        error = 0;
+
+                        eb = new EmbedBuilder();
+                        eb.setTitle("Hangman");
+                        eb.setDescription("**GAME OVER**\r\n" +
+                                "You reached a count of **9** mistakes and Benny died in **Hangman**\r\n" +
+                                "\r\n" +
+                                "Good luck next time ;)");
+                        eb.setImage(getErrPic(error));
+                        e.getChannel().editMessageEmbedsById(msgID, eb.build()).complete();
+                        e.getHook().editOriginal("You reached a count of **9** mistakes and Benny died in **Hangman**").queue();
+                    }
                 } else {
+                    System.out.println("active game :: " + active);
                     eb = new EmbedBuilder();
                     eb.setTitle("Hangman");
                     eb.setDescription("Which word we are searching for?\r\n" +
@@ -105,9 +126,28 @@ public class MG_Hangman extends ListenerAdapter {
                             "\r\n" +
                             "Mistakes: " + error + "/9");
                     eb.setImage(getErrPic(error));
-                    e.getChannel().editMessageEmbedsById(msgID, eb.build()).queue();
+                    e.getChannel().editMessageEmbedsById(msgID, eb.build()).complete();
                     e.getHook().editOriginal("Congratulations, you guessed a correct letter ;)").queue();
+
                     correct = false;
+                }
+
+                boolean working = letters.toString().contains("-");
+                System.out.println("finished: " + working);
+                if(working == false && active == true){
+                    active = false;
+                    curr_word = "";
+                    lines = "";
+
+                    eb = new EmbedBuilder();
+                    eb.setTitle("Hangman");
+                    eb.setDescription("The word have been finished with **" + error + "** mistakes!\r\n" +
+                            "Congratulations " + e.getMember().getAsMention() + ", you won 50 coins!");
+                    e.getChannel().editMessageEmbedsById(msgID, eb.build()).complete();
+                    e.getHook().editOriginal("Congratulations, you guessed the last letter and won 50 coins ;)").queue();
+                    SQL_Handler.addCoin(g.getId(), e.getMember().getUser().getId(), 50);
+
+                    error = 0;
                 }
             }
         }
