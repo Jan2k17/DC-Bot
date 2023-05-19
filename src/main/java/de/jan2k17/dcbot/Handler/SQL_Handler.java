@@ -9,6 +9,30 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class SQL_Handler {
+    public static boolean existsGuild(String GuildID) {
+        try {
+            PreparedStatement st = MySQL.con.prepareStatement("SELECT * FROM settings WHERE guild = " + GuildID + ";");
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e){
+            Logging.error(e.getMessage());
+        }
+        return false;
+    }
+    public static void setupGuild(String GuildID, String autorole, String logch, String lang){
+        try {
+            PreparedStatement st = MySQL.con.prepareStatement("INSERT INTO settings (guild,autorole,logch,lang) VALUES (?,?,?,?);");
+            st.setString(1, GuildID);
+            st.setString(2, autorole);
+            st.setString(3, logch);
+            st.setString(4, lang);
+            st.executeUpdate();
+        } catch(SQLException e){
+            Logging.error(e.getMessage());
+        }
+    }
     public static String getAutoRole(String GuildID) {
         try {
             PreparedStatement st = MySQL.con.prepareStatement("SELECT autorole FROM settings WHERE guild = " + GuildID + ";");
@@ -46,6 +70,14 @@ public class SQL_Handler {
     public static void updateLogChannel(String GuildID, String chID) {
         try {
             PreparedStatement st = MySQL.con.prepareStatement("UPDATE settings SET logch = " + chID + " WHERE guild = " + GuildID + ";");
+            st.executeUpdate();
+        } catch(SQLException e){
+            Logging.error(e.getMessage());
+        }
+    }
+    public static void updateLang(String GuildID, String lang) {
+        try {
+            PreparedStatement st = MySQL.con.prepareStatement("UPDATE settings SET lang = " + lang + " WHERE guild = " + GuildID + ";");
             st.executeUpdate();
         } catch(SQLException e){
             Logging.error(e.getMessage());

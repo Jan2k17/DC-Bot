@@ -13,6 +13,10 @@ public class CMD_settings extends ListenerAdapter {
         if (e.getName().equalsIgnoreCase("settings")) {
             if(e.getMember().getUser().isBot()) { return; }
             e.deferReply(true).queue();
+            if(SQL_Handler.existsGuild(e.getGuild().getId())){
+                e.getHook().editOriginal("**You need to setup the server first!**").queue();
+                return;
+            }
             String option = e.getOption("option", OptionMapping::getAsString);
             if(option.equalsIgnoreCase("autorole")){
                 Role r = e.getOption("autorole", OptionMapping::getAsRole);

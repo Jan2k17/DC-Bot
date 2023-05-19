@@ -30,6 +30,7 @@ public class Main {
                 gateway.add(intent);
             }
             JDA jda = JDABuilder.createLight(Token.token, Collections.emptyList()).enableIntents(gateway)
+                    .addEventListeners(new CMD_Setup())
                     .addEventListeners(new CMD_Help())
                     .addEventListeners(new CMD_Broadcast())
                     .addEventListeners(new CMD_Giveaway())
@@ -45,6 +46,13 @@ public class Main {
                     .build();
 
             jda.updateCommands().addCommands(
+                    Commands.slash("setup", "setup the bot for this discord")
+                            .setGuildOnly(true)
+                            .addOption(OptionType.CHANNEL, "logchannel", "select a channel to log bot actions", true)
+                            .addOption(OptionType.ROLE, "autorole", "select a standard server-role")
+                            .addOptions(new OptionData(OptionType.STRING, "language", "select a server language", true)
+                                    .addChoice("german", "de")
+                                    .addChoice("english", "en")),
                     Commands.slash("help", "list of commands")
                             .setGuildOnly(true),
                     Commands.slash("ping", "ping")
