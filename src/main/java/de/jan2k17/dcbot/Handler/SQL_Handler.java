@@ -236,4 +236,41 @@ public class SQL_Handler {
         }
         return null;
     }
+    /*
+    *
+    * GET TRANSLATION
+    *
+    */
+
+    public static String getGuildLang(String guild){
+        try{
+            PreparedStatement st = MySQL.con.prepareStatement("SELECT * FROM settings WHERE guild = ?;");
+            st.setString(1, guild);
+
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                return rs.getString("lang");
+            } else {
+                return "en";
+            }
+        } catch(SQLException e){
+            Logging.error(e.getMessage());
+        }
+        return "en";
+    }
+    public static String getTranslations(String translation, String lang){
+        try{
+            PreparedStatement st = MySQL.con.prepareStatement("SELECT * FROM translations WHERE guild = ? AND lang = ?;");
+            st.setString(1, translation);
+            st.setString(2, lang);
+
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                return rs.getString("string");
+            }
+        } catch(SQLException e){
+            Logging.error(e.getMessage());
+        }
+        return "ERR-#GetL";
+    }
 }

@@ -77,6 +77,10 @@ public class Main {
                                     .addChoice("autorole", "autorole")
                                     .addChoice("log channel", "logchannel")
                             )
+                            .addOptions(new OptionData(OptionType.STRING, "lang", "select the server language")
+                                    .addChoice("english", "en")
+                                    .addChoice("german", "de")
+                            )
                             .addOption(OptionType.ROLE, "autorole", "*only for autorole-option*")
                             .addOption(OptionType.CHANNEL, "logchannel", "*only for log-option*"),
                     Commands.slash("coins", "how many coins you have?")
