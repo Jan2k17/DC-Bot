@@ -1,6 +1,7 @@
 package de.jan2k17.dcbot.Commands;
 
 import de.jan2k17.dcbot.Functions.Logging;
+import de.jan2k17.dcbot.Handler.SQL_Handler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.Channel;
@@ -18,6 +19,10 @@ public class CMD_Broadcast extends ListenerAdapter {
             e.deferReply(true).queue();
             Member m = e.getMember();
             Guild g = e.getGuild();
+            if(!SQL_Handler.existsGuild(e.getGuild().getId())){
+                e.getHook().editOriginal("**Server needs a setup!**").queue();
+                return;
+            }
             Channel ch = e.getOption("channel", OptionMapping::getAsChannel);
             String msg = e.getOption("message", OptionMapping::getAsString);
             TextChannel tch = g.getTextChannelById(ch.getId());

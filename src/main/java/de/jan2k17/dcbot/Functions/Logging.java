@@ -16,7 +16,7 @@ public class Logging {
         eb.setColor(Color.RED);
         eb.setDescription(msg);
         eb.setAuthor(m.getUser().getName(), null, m.getUser().getAvatarUrl());
-        eb.setFooter("coded with ❤️ by j-f-a-b.de | 2023");
+        eb.setFooter("coded with ❤️ by j-f-a-b.de | 2024");
 
         g.getTextChannelById(SQL_Handler.getLogChannel(g.getId())).sendMessageEmbeds(eb.build()).queue();
     }

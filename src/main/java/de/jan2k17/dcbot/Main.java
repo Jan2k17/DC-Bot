@@ -31,10 +31,8 @@ public class Main {
             }
             JDA jda = JDABuilder.createLight(Token.token, Collections.emptyList()).enableIntents(gateway)
                     .addEventListeners(new CMD_Setup())
-                    .addEventListeners(new CMD_Help())
                     .addEventListeners(new CMD_Broadcast())
                     .addEventListeners(new CMD_Giveaway())
-                    .addEventListeners(new CMD_GiveRole())
                     .addEventListeners(new CMD_settings())
                     .addEventListeners(new CMD_Ping())
                     .addEventListeners(new CMD_Coins())
@@ -48,13 +46,11 @@ public class Main {
             jda.updateCommands().addCommands(
                     Commands.slash("setup", "setup the bot for this discord")
                             .setGuildOnly(true)
-                            .addOption(OptionType.CHANNEL, "logchannel", "select a channel to log bot actions", true)
+                            .addOption(OptionType.CHANNEL, "logch", "select a channel to log bot actions", true)
                             .addOption(OptionType.ROLE, "autorole", "select a standard server-role")
-                            .addOptions(new OptionData(OptionType.STRING, "language", "select a server language", true)
+                            .addOptions(new OptionData(OptionType.STRING, "language", "select a server language")
                                     .addChoice("german", "de")
                                     .addChoice("english", "en")),
-                    Commands.slash("help", "list of commands")
-                            .setGuildOnly(true),
                     Commands.slash("ping", "ping")
                             .setGuildOnly(true),
                     Commands.slash("hangman", "play hangman ;)")
@@ -67,14 +63,6 @@ public class Main {
                             .addOption(OptionType.STRING, "message", "message for the giveaway", true),
                     Commands.slash("activegw", "shows you how many giveaways are active")
                             .setGuildOnly(true),
-                    Commands.slash("giverole", "gives a member a specific role")
-                            .setGuildOnly(true)
-                            .addOption(OptionType.ROLE, "role", "select a role to remove", true)
-                            .addOption(OptionType.USER, "user", "select an user", true),
-                    Commands.slash("removerole", "removes a specific role from member")
-                            .setGuildOnly(true)
-                            .addOption(OptionType.ROLE, "role", "select a role", true)
-                            .addOption(OptionType.USER, "user", "select an user", true),
                     Commands.slash("broadcast", "To broadcast a message in the specified channel")
                             .setGuildOnly(true)
                             .addOption(OptionType.CHANNEL, "channel", "select a channel", true)

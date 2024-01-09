@@ -29,8 +29,11 @@ public class MG_Hangman extends ListenerAdapter {
             Member m = e.getMember();
             Guild g = e.getGuild();
             if (m.getUser().isBot()) { return; }
-
-            System.out.println("active game :: " + active);
+            if(!SQL_Handler.existsGuild(e.getGuild().getId())){
+                e.getHook().editOriginal("**Server needs a setup!**").queue();
+                return;
+            }
+            //System.out.println("active game :: " + active);
 
             if(active == false) {
                 Random rn = new Random();
@@ -51,7 +54,7 @@ public class MG_Hangman extends ListenerAdapter {
                 eb.setTitle("Hangman");
                 eb.setDescription("Which word we are searching for?\r\n" +
                         "\r\n" +
-                        "Word has " + letters.length + " letters:\r\n" +
+                        "The Word have " + letters.length + " letters:\r\n" +
                         "\r\n" +
                         "" + lines + "\r\n" +
                         "\r\n" +
@@ -115,7 +118,7 @@ public class MG_Hangman extends ListenerAdapter {
                         e.getHook().editOriginal("You reached a count of **9** mistakes and Benny died in **Hangman**").queue();
                     }
                 } else {
-                    System.out.println("active game :: " + active);
+                    System.out.println("active game - 2 :: " + active);
                     eb = new EmbedBuilder();
                     eb.setTitle("Hangman");
                     eb.setDescription("Which word we are searching for?\r\n" +

@@ -31,6 +31,10 @@ public class CMD_Shop extends ListenerAdapter {
         if (e.getName().equalsIgnoreCase("shop")) {
             if(e.getMember().getUser().isBot()) { return; }
             e.deferReply(true).queue();
+            if(SQL_Handler.existsGuild(e.getGuild().getId())){
+                e.getHook().editOriginal("Setup already done!").queue();
+                return;
+            }
             HashMap<String, Integer> shopItems = SQL_Handler.getShopItems(e.getGuild().getId());
             int count = SQL_Handler.getCountItems(e.getGuild().getId());
 
@@ -49,6 +53,10 @@ public class CMD_Shop extends ListenerAdapter {
         }
         if (e.getName().equalsIgnoreCase("shopadd")) {
             if(e.getMember().getUser().isBot()) { return; }
+            if(SQL_Handler.existsGuild(e.getGuild().getId())){
+                e.getHook().editOriginal("Setup already done!").queue();
+                return;
+            }
             TextInput itemname = TextInput.create("itemname", "Item name", TextInputStyle.SHORT)
                     .setRequiredRange(1, 50)
                     .build();
@@ -64,6 +72,10 @@ public class CMD_Shop extends ListenerAdapter {
         if (e.getName().equalsIgnoreCase("shopdel")) {
             if(e.getMember().getUser().isBot()) { return; }
             e.deferReply(true).queue();
+            if(SQL_Handler.existsGuild(e.getGuild().getId())){
+                e.getHook().editOriginal("Setup already done!").queue();
+                return;
+            }
             HashMap<String, Integer> shopItems = SQL_Handler.getShopItems(e.getGuild().getId());
             int count = SQL_Handler.getCountItems(e.getGuild().getId());
 
@@ -74,7 +86,6 @@ public class CMD_Shop extends ListenerAdapter {
                     mbuilder.addOption(name + " (" + cost + " Coins)", name + "_" + cost);
                 });
             } else {
-                //mbuilder.addOption("no items in shop", "no_items");
                 mbuilder.addOption(SQL_Handler.getTranslations("shop_noItems", SQL_Handler.getGuildLang(e.getGuild().getId())), "no_items");
             }
 
@@ -91,11 +102,9 @@ public class CMD_Shop extends ListenerAdapter {
             int count = SQL_Handler.getCountItems(e.getGuild().getId());
 
             if (count >= 24) {
-                //e.reply("You can't add more than 24 shop items!").setEphemeral(true).queue();
                 e.reply(SQL_Handler.getTranslations("shop_maxItems", SQL_Handler.getGuildLang(e.getGuild().getId()))).setEphemeral(true).queue();
             } else {
                 SQL_Handler.addShopItem(e.getGuild().getId(), itemname, cost);
-                //e.reply("Item **" + itemname + "** with price **" + cost + " Coins** added!").setEphemeral(true).queue();
                 String text = SQL_Handler.getTranslations("shop_added", SQL_Handler.getGuildLang(e.getGuild().getId())).replace("%itemname%", itemname).replace("%price%", cost);
                 e.reply(text).setEphemeral(true).queue();
                 Logging.Log(e.getGuild(),"Item **" + itemname + "** with price **" + cost + " Coins** added!", e.getMember());
@@ -117,7 +126,6 @@ public class CMD_Shop extends ListenerAdapter {
                 SQL_Handler.delCoin(g.getId(), m.getId(), cost);
                 String text = SQL_Handler.getTranslations("shop_buy", SQL_Handler.getGuildLang(e.getGuild().getId())).replace("%itemname%", item).replace("%price%", ""+cost);
                 e.getHook().editOriginal(text).queue();
-                //e.getHook().editOriginal("You bought successfully the item **" + item + "** for **" + cost + "Coins**").queue();
 
                 Logging.Log(e.getGuild(),"You bought successfully the item **" + item + "** for **" + cost + "Coins**", e.getMember());
             } else {
@@ -128,7 +136,6 @@ public class CMD_Shop extends ListenerAdapter {
             SQL_Handler.delShopItem(g.getId(), item, cost);
             String text = SQL_Handler.getTranslations("shop_delItem", SQL_Handler.getGuildLang(e.getGuild().getId())).replace("%itemname%", item);
             e.getHook().editOriginal(text).queue();
-            //e.getHook().editOriginal("You removed the item **" + item + "** from shop!").queue();
             Logging.Log(e.getGuild(),"You removed the item **" + item + "** from shop!", e.getMember());
         }
     }

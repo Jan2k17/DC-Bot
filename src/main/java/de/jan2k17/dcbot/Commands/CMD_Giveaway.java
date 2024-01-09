@@ -30,6 +30,10 @@ public class CMD_Giveaway extends ListenerAdapter {
         if(e.getName().equalsIgnoreCase("giveaway")){
             if(e.getMember().getUser().isBot()) { return; }
             e.deferReply(true).queue();
+            if(!SQL_Handler.existsGuild(e.getGuild().getId())){
+                e.reply("**Server needs a setup!**").queue();
+                return;
+            }
             int duration = e.getOption("duration", OptionMapping::getAsInt);
             String msg = e.getOption("message", OptionMapping::getAsString);
             ChannelType ct = e.getOption("channel", OptionMapping::getChannelType);
@@ -88,7 +92,13 @@ public class CMD_Giveaway extends ListenerAdapter {
             Logging.Log(e.getGuild(), "Giveaway started. (End: " + dateEnd + " - gwID: " + msgID + ")", e.getMember());
         }
         if(e.getName().equalsIgnoreCase("activegw")){
+            if(e.getMember().getUser().isBot()){return;}
+            if(!SQL_Handler.existsGuild(e.getGuild().getId())){
+                e.reply("**Server needs a setup!**").queue();
+                return;
+            }
             e.reply("There are " + giveaways.size() + " active giveaways!").queue();
+
         }
     }
     public static void activeGW(){

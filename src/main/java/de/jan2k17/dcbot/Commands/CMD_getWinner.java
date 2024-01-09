@@ -1,5 +1,6 @@
 package de.jan2k17.dcbot.Commands;
 
+import de.jan2k17.dcbot.Handler.SQL_Handler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageReaction;
@@ -22,7 +23,10 @@ public class CMD_getWinner extends ListenerAdapter {
             ChannelType ct = e.getOption("channel", OptionMapping::getChannelType);
             String gwID = e.getOption("giveaway", OptionMapping::getAsString);
             Guild guild = e.getGuild();
-
+            if(!SQL_Handler.existsGuild(e.getGuild().getId())){
+                e.getHook().editOriginal("**Server needs a setup!**").queue();
+                return;
+            }
             System.out.println("gwID: " + gwID);
 
             if(ct == ChannelType.TEXT){

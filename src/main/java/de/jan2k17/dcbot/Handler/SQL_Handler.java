@@ -292,7 +292,7 @@ public class SQL_Handler {
     }
     public static String getTranslations(String translation, String lang){
         try{
-            PreparedStatement st = MySQL.con.prepareStatement("SELECT * FROM translations WHERE guild = ? AND lang = ?;");
+            PreparedStatement st = MySQL.con.prepareStatement("SELECT * FROM translations WHERE translation = ? AND lang = ?;");
             st.setString(1, translation);
             st.setString(2, lang);
 
